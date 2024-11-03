@@ -6,6 +6,7 @@ import org.sdi.usermanager.dto.*;
 import org.sdi.usermanager.service.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<UserResponse>> getUsers(@RequestParam(value="page", defaultValue = "0") int page,
-                                                                    @RequestParam(value="size", defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<PaginatedResponse<UserResponse>> getUsers(@RequestParam(value="page", defaultValue="0") int page,
+                                                                    @RequestParam(value="size", defaultValue="10") int size,
+                                                                    @RequestParam(value="sortBy", defaultValue="lastName") String sortBy,
+                                                                    @RequestParam(value="dir", defaultValue="asc") String dir) {
+        Sort.Direction direction = dir.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
         return ResponseEntity.ok(userService.getUsers(pageable));
     }
 

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: product-manager
+  datasource:
+    url: jdbc:oracle:thin:@${DB_HOST}:${DB_PORT}/XE
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081

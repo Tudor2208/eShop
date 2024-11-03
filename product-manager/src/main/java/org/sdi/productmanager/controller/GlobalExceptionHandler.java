@@ -1,12 +1,11 @@
-package org.sdi.usermanager.controller;
+package org.sdi.productmanager.controller;
 
-import org.sdi.usermanager.dto.ErrorDTO;
-import org.sdi.usermanager.exception.EmailAlreadyExistsException;
-import org.sdi.usermanager.exception.InvalidCredentialsException;
-import org.sdi.usermanager.exception.NotFoundException;
+import org.sdi.productmanager.dto.ErrorDTO;
+import org.sdi.productmanager.exception.NotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,16 +28,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ErrorDTO> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
-        ErrorDTO error = ErrorDTO.builder()
-                .status(String.valueOf(HttpStatus.CONFLICT))
-                .message(ex.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
-
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorDTO> handleNotFoundException(NotFoundException ex) {
         ErrorDTO error = ErrorDTO.builder()
@@ -47,16 +36,6 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<ErrorDTO> handleInvalidCredentialsException(InvalidCredentialsException ex) {
-        ErrorDTO error = ErrorDTO.builder()
-                .status(String.valueOf(HttpStatus.UNAUTHORIZED))
-                .message(ex.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(Exception.class)
