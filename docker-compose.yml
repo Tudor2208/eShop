@@ -11,7 +11,27 @@ services:
     ports:
       - "5432:5432"                        
     volumes:
-      - postgres_data:/var/lib/postgresql/data  
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network  
+
+  oracle:
+    image: gvenzl/oracle-xe
+    container_name: products-db
+    environment:
+      ORACLE_PASSWORD: yourpassword
+      ORACLE_ALLOW_REMOTE: "true"
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle_data:/opt/oracle/oradata 
+    networks:
+      - app-network    
 
 volumes:
   postgres_data:
+  oracle_data:  
+
+networks:
+  app-network:
+    driver: bridge    

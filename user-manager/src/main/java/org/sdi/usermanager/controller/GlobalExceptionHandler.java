@@ -1,10 +1,9 @@
 package org.sdi.usermanager.controller;
 
-import jakarta.validation.ValidationException;
 import org.sdi.usermanager.dto.ErrorDTO;
-import org.sdi.usermanager.exceptions.EmailAlreadyExistsException;
-import org.sdi.usermanager.exceptions.InvalidCredentialsException;
-import org.sdi.usermanager.exceptions.NotFoundException;
+import org.sdi.usermanager.exception.EmailAlreadyExistsException;
+import org.sdi.usermanager.exception.InvalidCredentialsException;
+import org.sdi.usermanager.exception.NotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package org.sdi.usermanager.exceptions;
+package org.sdi.usermanager.exception;
 
 public class NotFoundException extends RuntimeException {
 
