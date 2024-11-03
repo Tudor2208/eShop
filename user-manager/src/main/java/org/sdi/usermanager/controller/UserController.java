@@ -2,10 +2,7 @@ package org.sdi.usermanager.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.sdi.usermanager.dto.CreateUserRequest;
-import org.sdi.usermanager.dto.PaginatedResponse;
-import org.sdi.usermanager.dto.PatchUserRequest;
-import org.sdi.usermanager.dto.UserResponse;
+import org.sdi.usermanager.dto.*;
 import org.sdi.usermanager.service.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +21,11 @@ import static org.sdi.usermanager.Constants.*;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.loginUser(request));
+    }
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {

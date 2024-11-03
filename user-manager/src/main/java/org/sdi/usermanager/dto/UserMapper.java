@@ -31,6 +31,15 @@ public class UserMapper {
                 .build();
     }
 
+    public LoginResponse toLoginResponse(User user) {
+        return LoginResponse.builder()
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .isAdmin(user.getIsAdmin())
+                .build();
+    }
+
     private String encrypt(String password) {
         return passwordEncoder.encode(password);
     }

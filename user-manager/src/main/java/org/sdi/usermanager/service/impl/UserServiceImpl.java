@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sdi.usermanager.dto.*;
 import org.sdi.usermanager.entity.User;
 import org.sdi.usermanager.exceptions.EmailAlreadyExistsException;
+import org.sdi.usermanager.exceptions.InvalidCredentialsException;
 import org.sdi.usermanager.exceptions.NotFoundException;
 import org.sdi.usermanager.repository.UserRepository;
 import org.sdi.usermanager.service.UserService;
@@ -80,6 +81,20 @@ public class UserServiceImpl implements UserService {
         }
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public LoginResponse loginUser(LoginRequest request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+
+        Optional<User> userOptional = userRepository.findById(email);
+        User user = userOptional.orElseThrow(InvalidCredentialsException::new);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidCredentialsException();
+        }
+
+        return userMapper.toLoginResponse(user);
     }
 
     @Override

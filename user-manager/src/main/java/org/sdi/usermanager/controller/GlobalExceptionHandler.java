@@ -1,7 +1,9 @@
 package org.sdi.usermanager.controller;
 
+import jakarta.validation.ValidationException;
 import org.sdi.usermanager.dto.ErrorDTO;
 import org.sdi.usermanager.exceptions.EmailAlreadyExistsException;
+import org.sdi.usermanager.exceptions.InvalidCredentialsException;
 import org.sdi.usermanager.exceptions.NotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -46,5 +48,15 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorDTO> handleValidationException(InvalidCredentialsException ex) {
+        ErrorDTO error = ErrorDTO.builder()
+                .status(String.valueOf(HttpStatus.UNAUTHORIZED))
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 }
