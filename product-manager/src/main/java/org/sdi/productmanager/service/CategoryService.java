@@ -1,6 +1,6 @@
 package org.sdi.productmanager.service;
 
-import org.sdi.productmanager.controller.CreateCategoryRequest;
+import org.sdi.productmanager.dto.CreateCategoryRequest;
 import org.sdi.productmanager.dto.PaginatedResponse;
 import org.sdi.productmanager.entity.Category;
 import org.springframework.data.domain.Pageable;
@@ -11,5 +11,6 @@ public interface CategoryService {
 
     Category createCategory(CreateCategoryRequest request);
     PaginatedResponse<Category> getCategories(Pageable pageable);
+    Category getCategory(Long id);
     void deleteCategory(Long id);
 }

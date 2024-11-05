@@ -2,6 +2,7 @@ package org.sdi.productmanager.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.sdi.productmanager.dto.CreateCategoryRequest;
 import org.sdi.productmanager.dto.PaginatedResponse;
 import org.sdi.productmanager.entity.Category;
 import org.sdi.productmanager.service.CategoryService;

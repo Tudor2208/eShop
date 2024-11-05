@@ -1,4 +1,4 @@
-package org.sdi.productmanager.controller;
+package org.sdi.productmanager.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

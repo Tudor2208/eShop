@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.loginUser(request));
     }
 
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PatchMapping("/{email}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable(value="email") String email,
+    public ResponseEntity<UserResponse> patchUser(@PathVariable(value="email") String email,
                                                    @Valid @RequestBody PatchUserRequest request) {
         return ResponseEntity.ok(userService.patchUser(email, request));
     }

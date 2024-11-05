@@ -1,7 +1,7 @@
 package org.sdi.productmanager.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.sdi.productmanager.controller.CreateCategoryRequest;
+import org.sdi.productmanager.dto.CreateCategoryRequest;
 import org.sdi.productmanager.dto.CategoryMapper;
 import org.sdi.productmanager.dto.PaginatedResponse;
 import org.sdi.productmanager.entity.Category;
@@ -44,6 +44,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .totalElements(pageableCategories.getTotalElements())
                 .totalPages(pageableCategories.getTotalPages())
                 .build();
+    }
+
+    @Override
+    public Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Category with id %s not found", id)));
     }
 
     @Override

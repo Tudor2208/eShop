@@ -1,10 +1,18 @@
 package org.sdi.productmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Entity
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="products")
 public class Product {
 
@@ -18,7 +26,10 @@ public class Product {
     @Column(columnDefinition = "CLOB", nullable = false)
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, Object> specifications;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Review> reviews;
 }

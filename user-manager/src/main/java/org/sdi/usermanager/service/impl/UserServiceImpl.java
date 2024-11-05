@@ -7,6 +7,7 @@ import org.sdi.usermanager.exception.EmailAlreadyExistsException;
 import org.sdi.usermanager.exception.InvalidCredentialsException;
 import org.sdi.usermanager.exception.NotFoundException;
 import org.sdi.usermanager.repository.UserRepository;
+import org.sdi.usermanager.service.KafkaProducerService;
 import org.sdi.usermanager.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String CREATE_USER_TOPIC = "user.create";
+    private static final String DELETE_USER_TOPIC = "user.delete";
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {
@@ -32,7 +37,10 @@ public class UserServiceImpl implements UserService {
         }
 
         User entity = userMapper.toEntity(request);
-        return userMapper.toUserResponse(userRepository.save(entity));
+        userRepository.save(entity);
+
+        kafkaProducerService.sendMessage(CREATE_USER_TOPIC, request.getEmail());
+        return userMapper.toUserResponse(entity);
     }
 
     @Override
@@ -44,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse<UserResponse> getUsers(Pageable pageable) {
-        Page<User> pageableUsers = userRepository.findAllByIsAdmin(false, pageable);
+        Page<User> pageableUsers = userRepository.findAll(pageable);
 
         List<UserResponse> users = pageableUsers.stream()
                 .map(userMapper::toUserResponse)
@@ -103,5 +111,7 @@ public class UserServiceImpl implements UserService {
         userOptional.ifPresentOrElse(userRepository::delete, () -> {
             throw new NotFoundException(String.format("User with email %s not found", email));
         });
+
+        kafkaProducerService.sendMessage(DELETE_USER_TOPIC, email);
     }
 }
