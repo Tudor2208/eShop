@@ -8,7 +8,6 @@ import org.sdi.productmanager.entity.User;
 import org.sdi.productmanager.exception.NotFoundException;
 import org.sdi.productmanager.repository.ProductRepository;
 import org.sdi.productmanager.repository.ReviewRepository;
-import org.sdi.productmanager.service.ProductService;
 import org.sdi.productmanager.service.ReviewService;
 import org.sdi.productmanager.service.UserService;
 import org.springframework.data.domain.Page;

@@ -1,7 +1,6 @@
 package org.sdi.productmanager.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.sdi.productmanager.dto.*;
 import org.sdi.productmanager.entity.Category;
 import org.sdi.productmanager.entity.Product;
