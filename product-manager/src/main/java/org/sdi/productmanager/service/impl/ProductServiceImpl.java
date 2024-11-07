@@ -75,6 +75,10 @@ public class ProductServiceImpl implements ProductService {
             product.setSpecifications(request.getSpecifications());
         }
 
+        if (request.getStock() != null) {
+            product.setStock(request.getStock());
+        }
+
         return productMapper.toProductResponse(productRepository.save(product));
     }
 

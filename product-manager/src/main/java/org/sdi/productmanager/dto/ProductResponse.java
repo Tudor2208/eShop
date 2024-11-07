@@ -15,4 +15,8 @@ public class ProductResponse {
     private Double price;
     private Category category;
     private Map<String, Object> specifications;
+    private Integer stock;
+    private Double rating;
+    private Integer nrOfReviews;
+    private String postDate;
 }

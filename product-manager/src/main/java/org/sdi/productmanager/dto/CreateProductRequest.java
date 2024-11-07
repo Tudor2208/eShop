@@ -20,4 +20,7 @@ public class CreateProductRequest {
     private Long categoryId;
     @NotNull(message="Specifications cannot be empty")
     private Map<String, Object> specifications;
+    @Positive(message="Stock should be a positive number")
+    @NotNull(message="Stock should be specified")
+    private Integer stock;
 }

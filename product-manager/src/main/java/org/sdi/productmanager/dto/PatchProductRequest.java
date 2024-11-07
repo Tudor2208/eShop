@@ -9,8 +9,10 @@ import java.util.Map;
 public class PatchProductRequest {
 
     private String title;
-    @Positive(message = "Price must be greater than zero")
+    @Positive(message="Price must be greater than zero")
     private Double price;
     private Long categoryId;
     private Map<String, Object> specifications;
+    @Positive(message="Stock must be greater than zero")
+    private Integer stock;
 }

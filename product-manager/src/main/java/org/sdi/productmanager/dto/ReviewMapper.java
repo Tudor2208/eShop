@@ -1,23 +1,32 @@
 package org.sdi.productmanager.dto;
 
+import lombok.AllArgsConstructor;
+import org.sdi.productmanager.client.UserClient;
 import org.sdi.productmanager.entity.Product;
 import org.sdi.productmanager.entity.Review;
 import org.sdi.productmanager.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
+@AllArgsConstructor
 public class ReviewMapper {
 
+    private final UserClient userClient;
+
     public ReviewResponse toReviewResponse(Review review) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = formatter.format(review.getReviewDate());
+
         return ReviewResponse.builder()
                 .id(review.getId())
                 .message(review.getMessage())
-                .product(review.getProduct())
-                .reviewDate(review.getReviewDate())
+                .productId(review.getProduct().getId())
+                .reviewDate(formattedDate)
                 .stars(review.getStars())
-                .reviewer(review.getReviewer())
+                .reviewer(userClient.getUserDetails(review.getReviewer().getEmail()))
                 .build();
     }
 

@@ -20,5 +20,9 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
+client:
+  user-manager:
+    base-url: http://${USER_MANAGER_HOST}:8080/
+
 server:
   port: 8081

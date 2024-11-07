@@ -25,7 +25,20 @@ services:
       - oracle_data:/opt/oracle/oradata 
     networks:
       - app-network
-      
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: orders-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Yourpassword123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql   
+    networks:
+      - app-network    
+
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     environment:
@@ -52,7 +65,8 @@ services:
 
 volumes:
   postgres_data:
-  oracle_data:  
+  oracle_data:
+  mssql_data:    
 
 networks:
   app-network:
