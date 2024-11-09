@@ -8,7 +8,6 @@ function LoginForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault(); 
-
     onSubmit(email, password);
   };
 
@@ -27,6 +26,7 @@ function LoginForm({ onSubmit }) {
           <div className="row">
             <i className="fa-solid fa-envelope"></i>
             <input
+              required
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -37,6 +37,7 @@ function LoginForm({ onSubmit }) {
           <div className="row">
             <i className="fa-solid fa-lock"></i>
             <input
+              required
               type={passwordVisible ? 'text' : 'password'}  
               value={password}
               onChange={(e) => setPassword(e.target.value)} 

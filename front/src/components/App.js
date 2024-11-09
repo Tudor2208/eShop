@@ -1,10 +1,14 @@
-import LoginForm from "./LoginForm";
+import { Toaster } from 'sonner';
+
+const handleData = (data) => {
+  console.log(data);
+}
 
 function App() {
   return (
-   <>
-    
-   </>
+    <>
+      <Toaster richColors position="bottom-center" expand={true}/>
+    </>
   );
 }
 
