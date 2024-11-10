@@ -1,0 +1,97 @@
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    color: #01497C;
+    margin-left: 50px;
+}
+
+.search-bar {
+    position: relative;
+    width: 600px;
+}
+
+.search-bar input {
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    width: 100%;
+    padding: 8px 15px 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background-color: #ffffff;
+}
+
+.search-bar .search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px; 
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    padding: 8px 16px;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-button i {
+    font-size: 18px;
+}
+
+.nav-button:hover {
+    color: #0056b3;
+    transform: scale(1.05);
+}
+
+.nav-button .left-icon {
+    font-size: 20px;
+}
+
+.nav-button .right-icon {
+    font-size: 14px;
+    margin-left: auto;
+}
+
+.logout .logout-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-icon i {
+    font-size: 25px;
+    color: #333;
+}
+
+.logout-icon:hover i {
+    color: #ff4c4c;
+}
