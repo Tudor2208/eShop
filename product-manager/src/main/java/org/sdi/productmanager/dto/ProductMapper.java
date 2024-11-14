@@ -47,25 +47,20 @@ public class ProductMapper {
 
     private double computeProductRating(Product product) {
         List<Review> reviews = product.getReviews();
-
         if (reviews == null) {
             return 0;
         }
-
         OptionalDouble average = reviews.stream()
                 .mapToDouble(Review::getStars)
                 .average();
-
         return average.orElse(0.0);
     }
 
     private int getNrOfProductReviews(Product product) {
         List<Review> reviews = product.getReviews();
-
         if (reviews == null) {
             return 0;
         }
-
         return reviews.size();
     }
 }

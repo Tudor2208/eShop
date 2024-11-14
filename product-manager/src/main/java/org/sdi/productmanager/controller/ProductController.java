@@ -9,6 +9,7 @@ import org.sdi.productmanager.dto.ProductResponse;
 import org.sdi.productmanager.service.ProductService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,11 @@ public class ProductController {
     public ResponseEntity<PaginatedResponse<ProductResponse>> getProducts(@RequestParam(value="page", defaultValue="0") int page,
                                                                           @RequestParam(value="size", defaultValue="10") int size,
                                                                           @RequestParam(value="categoryId", required = false) Long categoryId,
-                                                                          @RequestParam(value="keywords", required = false) String keywords) {
-        Pageable pageable = PageRequest.of(page, size);
+                                                                          @RequestParam(value="keywords", required = false) String keywords,
+                                                                          @RequestParam(value="sortBy", defaultValue="price") String sortBy,
+                                                                          @RequestParam(value="sortOrder", defaultValue="asc") String sortOrder) {
+        Sort.Direction direction = sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
         return ResponseEntity.ok(productService.getProducts(pageable, categoryId, keywords));
     }
 

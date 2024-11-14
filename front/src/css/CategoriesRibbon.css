@@ -28,6 +28,12 @@
     flex-shrink: 0; 
   }
   
+  .category-item.selected {
+    background-color: #003f5c; 
+    font-weight: bold;
+    border: 2px solid white;
+}
+
   .category-item:hover {
     background-color: #0056b3;
   }

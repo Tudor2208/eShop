@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/CategoriesRibbon.css';
 
-function CategoriesRibbon() {
+function CategoriesRibbon(props) {
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0); 
   const [totalPages, setTotalPages] = useState(1); 
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,6 +34,12 @@ function CategoriesRibbon() {
     }
   };
 
+  const handleCategoryClick = (categoryId) => {
+    const newSelectedCategoryId = categoryId === selectedCategoryId ? null : categoryId;
+    setSelectedCategoryId(newSelectedCategoryId);
+    props.onCategoryClick(newSelectedCategoryId);
+  };
+
   return (
     <div className="categories-ribbon">
       <button 
@@ -45,7 +52,10 @@ function CategoriesRibbon() {
 
       <div className="categories-list">
         {categories.map((category) => (
-          <div key={category.id} className="category-item">
+          <div 
+              key={category.id} 
+              className={`category-item ${selectedCategoryId === category.id ? 'selected' : ''}`}
+              onClick={() => handleCategoryClick(category.id)}>
             <span>{category.name}</span>
           </div>
         ))}
