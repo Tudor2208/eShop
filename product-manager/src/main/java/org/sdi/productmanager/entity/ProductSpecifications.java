@@ -1,6 +1,8 @@
 package org.sdi.productmanager.entity;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Locale;
+
 public class ProductSpecifications {
 
     public static Specification<Product> hasCategory(Long categoryId) {
@@ -19,7 +21,10 @@ public class ProductSpecifications {
                 return criteriaBuilder.conjunction();
             }
 
-            return criteriaBuilder.like(root.get("title"), "%" + keywords + "%");
+            return criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("title")),
+                    "%" + keywords.toLowerCase() + "%"
+            );
         };
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import "../css/Products.css";
 
@@ -9,6 +10,8 @@ function Products({ categoryId, searchText }) {
     const [currentPage, setCurrentPage] = useState(0);
     const [products, setProducts] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+
+    const navigate = useNavigate();
 
     const fetchProducts = async (page = 0, sortBy, sortOrder) => {
         try {
@@ -21,7 +24,6 @@ function Products({ categoryId, searchText }) {
                 url += `&keywords=${encodeURIComponent(searchText)}`;
             }
             
-            console.log(url);
             const response = await fetch(url);
             const data = await response.json();
     
@@ -38,12 +40,12 @@ function Products({ categoryId, searchText }) {
 
     const handleSortOptionChange = (e) => {
         setSortOption(e.target.value);
-        setCurrentPage(0); // Reset to page 0 when sorting changes
+        setCurrentPage(0); 
     };
 
     const handleSortOrderChange = (e) => {
         setSortOrder(e.target.value);
-        setCurrentPage(0); // Reset to page 0 when order changes
+        setCurrentPage(0); 
     };
 
     const handleNextPage = () => {
@@ -57,6 +59,10 @@ function Products({ categoryId, searchText }) {
             setCurrentPage(prevPage => prevPage - 1);
         }
     };
+
+    const handleCardClick = (id) => {
+        navigate(`/product/${id}`)
+    }
 
     return (
         <>
@@ -87,7 +93,7 @@ function Products({ categoryId, searchText }) {
 
             <div className="product-grid">
                 {products.map((product, index) => (
-                    <ProductCard key={index} product={product} />
+                    <ProductCard key={index} product={product} onClick={() => handleCardClick(product.id)} />
                 ))}
             </div>
 

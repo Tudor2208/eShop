@@ -8,6 +8,7 @@ import org.sdi.productmanager.entity.ProductSpecifications;
 import org.sdi.productmanager.exception.NotFoundException;
 import org.sdi.productmanager.repository.ProductRepository;
 import org.sdi.productmanager.service.CategoryService;
+import org.sdi.productmanager.service.KafkaProducerService;
 import org.sdi.productmanager.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +25,19 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final ProductMapper productMapper;
+    private final KafkaProducerService kafkaProducerService;
+
+    private static final String CREATE_PRODUCT_TOPIC = "product.create";
+    private static final String DELETE_PRODUCT_TOPIC = "product.delete";
 
     @Override
     public ProductResponse createProduct(CreateProductRequest request) {
         Category category = categoryService.getCategory(request.getCategoryId());
         Product product = productMapper.toEntity(request, category);
-        return productMapper.toProductResponse(productRepository.save(product));
+        Product savedProduct = productRepository.save(product);
+
+        kafkaProducerService.sendMessage(CREATE_PRODUCT_TOPIC, String.valueOf(savedProduct.getId()));
+        return productMapper.toProductResponse(savedProduct);
     }
 
     @Override
@@ -91,7 +99,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        productRepository.findById(id).ifPresentOrElse(productRepository::delete,
+        productRepository.findById(id).ifPresentOrElse(product -> {
+                        productRepository.delete(product);
+                        kafkaProducerService.sendMessage(DELETE_PRODUCT_TOPIC, String.valueOf(product.getId()));
+                        },
                 () -> {
             throw new NotFoundException(String.format("Product with id %s not found", id));
         });

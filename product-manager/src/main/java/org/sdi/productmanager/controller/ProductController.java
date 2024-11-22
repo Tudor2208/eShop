@@ -44,6 +44,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(pageable, categoryId, keywords));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable(value="id") Long id) {
+        return ResponseEntity.ok(productService.getProduct(id));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponse> patchProduct(@PathVariable(value="id") Long id,
                                                         @Valid @RequestBody PatchProductRequest request) {

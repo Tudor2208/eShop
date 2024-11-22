@@ -13,5 +13,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.SQLServer2012Dialect
         hbm2ddl.auto: update
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    consumer:
+      group-id: my-consumer-group-2
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 server:
   port: 8082
