@@ -1,14 +1,41 @@
 import '../css/Header.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Header(props) {
     const [searchText, setSearchText] = useState('');
+    const [cartItemCount, setCartItemCount] = useState(0); 
     const navigate = useNavigate();
+
+    const calculateCartItemCount = () => {
+        const cart = JSON.parse(localStorage.getItem('cart')) || []; 
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0); 
+        setCartItemCount(totalItems);
+    };
+
+    useEffect(() => {
+        calculateCartItemCount(); // Initialize cart count on component mount
+    }, []); 
+
+    useEffect(() => {
+        window.addEventListener('storage', calculateCartItemCount); // Listen to storage changes from other tabs
+        return () => window.removeEventListener('storage', calculateCartItemCount); 
+    }, []);
+
+    // This function will be used when you update the cart in localStorage
+    const updateCartInLocalStorage = (updatedCart) => {
+        localStorage.setItem('cart', JSON.stringify(updatedCart)); 
+        calculateCartItemCount();  // Manually update the cart item count
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('cart');
         navigate("/login");
+    };
+
+    const handleCart = () => {
+        navigate("/cart");
     };
 
     const handleSearch = () => {
@@ -58,10 +85,15 @@ function Header(props) {
                     My orders
                     <i className="fas fa-arrow-down right-icon"></i>
                 </button>
-                <button className="nav-button">
+                <button className="nav-button" onClick={handleCart}>
                     <i className="fas fa-shopping-cart left-icon"></i> 
                     My cart
                     <i className="fas fa-arrow-down right-icon"></i> 
+                    {cartItemCount > 0 && (
+                        <div className="cart-badge">
+                            {cartItemCount}
+                        </div>
+                    )}
                 </button>
             </div>
 

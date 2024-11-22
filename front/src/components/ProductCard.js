@@ -36,25 +36,28 @@ function ProductCard({ product, onClick }) {
       };
 
       try {
-          const response = await fetch(`http://localhost:8082/api/v1/carts/${userEmail}`, {
-              method: "PUT",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-          });
+        const response = await fetch(`http://localhost:8082/api/v1/carts/${userEmail}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
 
-          if (response.ok) {
-              setShowDialog(false); 
-              toast.success("Product added to cart!"); 
-          } else {
-              const data = await response.json();
-              toast.error(data.message || "Something went wrong.");
-          }
-      } catch (error) {
-          toast.error("An error occurred while adding the product to the cart.");
-      }
-  };
+        if (response.ok) {
+            const cartData = await response.json(); 
+            setShowDialog(false);
+            localStorage.setItem("cart", JSON.stringify(cartData.items)); 
+            window.location.reload();
+            toast.success("Product added to cart!");
+        } else {
+            const data = await response.json();
+            toast.error(data.message || "Something went wrong.");
+        }
+    } catch (error) {
+        toast.error("An error occurred while adding the product to the cart.");
+    }
+};
 
   const handleCloseDialog = () => {
       setShowDialog(false); 
