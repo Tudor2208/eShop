@@ -12,7 +12,7 @@ function ShoppingCartPage() {
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     setCartItems(cart);
-    fetchProductDetails(cart); 
+    fetchProductDetails(cart);
   }, []);
 
   const fetchProductDetails = async (cart) => {
@@ -48,7 +48,7 @@ function ShoppingCartPage() {
       items: [
         {
             productId: productId,
-            quantity: 0,
+            quantity: 0, 
         }
       ]
     };
@@ -65,7 +65,7 @@ function ShoppingCartPage() {
         if (response.ok) {
             const cartData = await response.json();  
             localStorage.setItem("cart", JSON.stringify(cartData.items));  
-            window.location.reload();  
+            setCartItems(cartData.items);  
             toast.success("Product removed from cart!");  
         } else {
             const data = await response.json();
@@ -74,13 +74,56 @@ function ShoppingCartPage() {
     } catch (error) {
         toast.error("An error occurred while removing the product from the cart.");
     }
-};
+  };
 
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
       const product = productDetails.find((prod) => prod.productId === item.productId);
       return product ? total + item.quantity * product.price : total;
     }, 0);
+  };
+
+  const handlePlaceOrder = async () => {
+
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty. Add items to your cart before placing an order.");
+      return;
+    }
+
+    const orderItems = cartItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    }));
+
+    const orderData = {
+      userEmail: user.email,
+      orderItems: orderItems,
+    };
+
+    try {
+
+      const response = await fetch('http://localhost:8082/api/v1/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const orderResponse = await response.json();
+        toast.success("Order placed successfully!");
+        for (const item of cartItems) {
+          await handleDeleteItem(item.productId); 
+        }
+
+      } else {
+        const data = await response.json();
+        toast.error(data.message || "Failed to place order.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while placing the order.");
+    }
   };
 
   return (
@@ -110,7 +153,7 @@ function ShoppingCartPage() {
                   className="delete-button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeleteItem(item.productId);
+                    handleDeleteItem(item.productId); 
                   }}
                 >
                   Delete
@@ -126,6 +169,14 @@ function ShoppingCartPage() {
       <div className="total-price">
         <h3>Total: {calculateTotalPrice().toFixed(2)} Lei</h3>
       </div>
+
+      {cartItems.length > 0 &&  
+      <div className="place-order">
+        <button onClick={handlePlaceOrder} className="place-order-button">
+          Place Order
+        </button>
+      </div>}
+     
     </div>
   );
 }

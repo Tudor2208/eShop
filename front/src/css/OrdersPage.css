@@ -1,0 +1,40 @@
+.orders-page {
+    padding: 20px;
+  }
+  
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .order-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+  }
+  
+  .order-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .order-item h3 {
+    margin: 0;
+  }
+  
+  .order-item ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .order-item ul li {
+    margin-bottom: 5px;
+  }
+  
+  .order-item p {
+    margin: 5px 0;
+  }
+  

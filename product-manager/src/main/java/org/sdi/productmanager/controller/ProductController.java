@@ -22,6 +22,7 @@ import static org.sdi.productmanager.Constants.*;
 @Validated
 @RequiredArgsConstructor
 @RequestMapping(V1 + PRODUCTS)
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     private final ProductService productService;
@@ -49,7 +50,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> patchProduct(@PathVariable(value="id") Long id,
                                                         @Valid @RequestBody PatchProductRequest request) {
         return ResponseEntity.ok(productService.patchProduct(id, request));

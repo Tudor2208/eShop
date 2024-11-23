@@ -38,6 +38,10 @@ function Header(props) {
         navigate("/cart");
     };
 
+    const handleOrders = () => {
+        navigate("/orders");
+    };
+
     const handleSearch = () => {
         props.onSearchText(searchText);
         setSearchText(''); 
@@ -80,7 +84,7 @@ function Header(props) {
                     My account
                     <i className="fas fa-arrow-down right-icon"></i> 
                 </button>
-                <button className="nav-button">
+                <button className="nav-button" onClick={handleOrders}>
                     <i className="fas fa-box left-icon"></i> 
                     My orders
                     <i className="fas fa-arrow-down right-icon"></i>

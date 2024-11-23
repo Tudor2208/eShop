@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from 'sonner';
 import "../css/ProductDetails.css";
 
 function ProductDetails() {
@@ -7,8 +8,11 @@ function ProductDetails() {
     const [product, setProduct] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [newReview, setNewReview] = useState({ message: "", stars: 0 });
 
-    // Fetch product details and reviews
+    const userEmail = JSON.parse(localStorage.getItem("user"))?.email;
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -16,7 +20,6 @@ function ProductDetails() {
                 const productData = await productResponse.json();
                 setProduct(productData);
 
-                // Fetch reviews for this product
                 const reviewsResponse = await fetch(`http://localhost:8081/api/v1/reviews?productId=${id}`);
                 const reviewsData = await reviewsResponse.json();
                 setReviews(reviewsData.content);
@@ -31,17 +34,62 @@ function ProductDetails() {
         fetchProduct();
     }, [id]);
 
+    const handleAddReview = async () => {
+        try {
+            const response = await fetch(`http://localhost:8081/api/v1/reviews`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...newReview,
+                    userEmail,
+                    productId: Number(id),
+                }),
+            });
+
+            if (response.ok) {
+                const savedReview = await response.json();
+                setReviews((prevReviews) => [...prevReviews, savedReview]);
+                setNewReview({ message: "", stars: 0 });
+                setShowReviewForm(false);
+            } else {
+                console.error("Failed to add review.");
+            }
+        } catch (error) {
+            console.error("Error while adding review:", error);
+        }
+    };
+
+    const handleDeleteReview = async (reviewId) => {
+        if (window.confirm("Are you sure you want to delete this review?")) {
+            try {
+                const response = await fetch(`http://localhost:8081/api/v1/reviews/${reviewId}`, {
+                    method: "DELETE",
+                });
+                if (response.ok) {
+                    toast.info("Your review has been successfully deleted")
+                    setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+                } else {
+                    console.error("Failed to delete review.");
+                }
+            } catch (error) {
+                console.error("Error while deleting review:", error);
+            }
+        }
+    };
+
     if (loading) {
-        return <div>Loading product details...</div>;
+        return <div className="loading">Loading product details...</div>;
     }
 
     return (
         <div className="product-details-page">
             <h1>{product.title}</h1>
             <div className="product-details-content">
-                <img 
-                    src={`${process.env.PUBLIC_URL}/images/${product.id}.png`} 
-                    alt={product.title} 
+                <img
+                    src={`${process.env.PUBLIC_URL}/images/${product.id}.png`}
+                    alt={product.title}
                     className="product-details-image"
                 />
                 <div className="product-details-info">
@@ -53,7 +101,6 @@ function ProductDetails() {
                 </div>
             </div>
 
-            {/* Specifications Table */}
             <table className="specifications-table">
                 <thead>
                     <tr>
@@ -71,20 +118,30 @@ function ProductDetails() {
                 </tbody>
             </table>
 
-            {/* Reviews Section */}
             <div className="reviews-section">
                 <h2>Customer Reviews</h2>
                 {reviews.length > 0 ? (
                     <div className="reviews-list">
                         {reviews.map((review) => (
                             <div key={review.id} className="review-card">
-                                <p><strong>{review.reviewer.firstName + " " + review.reviewer.lastName}</strong> <span>({review.reviewDate})</span></p>
+                                <p>
+                                    <strong>{review.reviewer.firstName + " " + review.reviewer.lastName}</strong>
+                                    <span>({review.reviewDate})</span>
+                                </p>
                                 <div className="review-rating">
                                     {Array.from({ length: 5 }, (_, i) => (
                                         <span key={i} className={i < review.stars ? "star filled" : "star"}>★</span>
                                     ))}
                                 </div>
                                 <p>{review.message}</p>
+                                {review.reviewer.email === userEmail && (
+                                    <button
+                                        className="delete-review-button"
+                                        onClick={() => handleDeleteReview(review.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -92,6 +149,36 @@ function ProductDetails() {
                     <p>No reviews yet.</p>
                 )}
             </div>
+
+            <button className="add-review-button" onClick={() => setShowReviewForm(!showReviewForm)}>
+                {showReviewForm ? "Cancel" : "Add Review"}
+            </button>
+
+            {showReviewForm && (
+                <div className="review-form">
+                    <h3>Add Your Review</h3>
+                    <textarea
+                        className="review-textarea"
+                        placeholder="Write your review here..."
+                        value={newReview.message}
+                        onChange={(e) => setNewReview({ ...newReview, message: e.target.value })}
+                    />
+                    <div className="review-rating-select">
+                            <label>Rating:</label>
+                            <select
+                                value={newReview.stars}
+                                onChange={(e) => setNewReview({ ...newReview, stars: Number(e.target.value) })}
+                            >
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <option key={star} value={star}>{star} Star{star > 1 && "s"}</option>
+                                ))}
+                            </select>
+                        </div>
+                    <button className="submit-review-button" onClick={handleAddReview}>
+                        Submit Review
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

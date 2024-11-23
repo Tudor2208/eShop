@@ -70,4 +70,15 @@
   .delete-button:hover {
     background-color: darkred;
   }
+
+  .place-order-button {
+    background-color: #28A745;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+  }
   
