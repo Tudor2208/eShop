@@ -2,10 +2,7 @@ package org.sdi.productmanager.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.sdi.productmanager.dto.CreateProductRequest;
-import org.sdi.productmanager.dto.PaginatedResponse;
-import org.sdi.productmanager.dto.PatchProductRequest;
-import org.sdi.productmanager.dto.ProductResponse;
+import org.sdi.productmanager.dto.*;
 import org.sdi.productmanager.service.ProductService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -22,7 +20,6 @@ import static org.sdi.productmanager.Constants.*;
 @Validated
 @RequiredArgsConstructor
 @RequestMapping(V1 + PRODUCTS)
-@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     private final ProductService productService;
@@ -60,5 +57,15 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable(value="id") Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image,
+                                         @RequestParam("productId") String productId) {
+        ImageResponse imageResponse = productService.uploadImage(image, productId);
+        if (imageResponse.getPath().contains("failed")) {
+            return ResponseEntity.status(500).body(imageResponse);
+        }
+        return ResponseEntity.ok(imageResponse);
     }
 }

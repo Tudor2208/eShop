@@ -1,5 +1,6 @@
 import { useState } from 'react';  
 import '../css/LoginForm.css';
+import { Link } from 'react-router-dom';
 
 function LoginForm({ onSubmit }) {
   const [email, setEmail] = useState('');
@@ -53,7 +54,8 @@ function LoginForm({ onSubmit }) {
 
           <input type="submit" value="Login" id="submit-button" />
           <h3>
-            Don't have an account? <a href="#">Sign up here!</a>
+            Don't have an account? 
+            <Link to="/signup">Sign up here!</Link>
           </h3>
         </form>
       </div>

@@ -27,16 +27,15 @@ function LoginPage() {
                 const data = await response.json();
                 localStorage.setItem('user', JSON.stringify(data));
 
-                // Fetch the user's cart after successful login
                 const cartResponse = await fetch(`http://localhost:8082/api/v1/carts/${email}`);
                 if (cartResponse.ok) {
                     const cartData = await cartResponse.json();
-                    localStorage.setItem('cart', JSON.stringify(cartData.items || [])); // Store cart items in local storage
+                    localStorage.setItem('cart', JSON.stringify(cartData.items || [])); 
                 } else {
                     toast.error('Failed to fetch the cart.');
                 }
 
-                navigate("/"); // Redirect to home page
+                navigate("/"); 
                 toast.success("Login successful");
             } else {
                 toast.error('Invalid credentials!'); 

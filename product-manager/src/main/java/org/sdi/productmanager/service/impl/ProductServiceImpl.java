@@ -14,9 +14,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.sdi.productmanager.Constants.IMAGE_UPLOAD_DIR;
 
 @Service
 @RequiredArgsConstructor
@@ -101,10 +108,51 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository.findById(id).ifPresentOrElse(product -> {
                         productRepository.delete(product);
+                        deleteImage(String.valueOf(product.getId()));
                         kafkaProducerService.sendMessage(DELETE_PRODUCT_TOPIC, String.valueOf(product.getId()));
                         },
                 () -> {
             throw new NotFoundException(String.format("Product with id %s not found", id));
         });
+    }
+
+    @Override
+    public ImageResponse uploadImage(MultipartFile file, String productId) {
+        try {
+            Path uploadDir = Paths.get(IMAGE_UPLOAD_DIR);
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            String fileName = productId + ".png";
+            Path filePath = uploadDir.resolve(fileName);
+
+            file.transferTo(filePath);
+
+            return new ImageResponse("/images/" + fileName);
+
+        } catch (IOException e) {
+            return new ImageResponse("Image upload failed: " + e.getMessage());
+        }
+    }
+
+    public String deleteImage(String productId) {
+        try {
+            Path imagePath = Paths.get(IMAGE_UPLOAD_DIR, productId + ".png");
+            File imageFile = imagePath.toFile();
+
+            if (imageFile.exists() && imageFile.isFile()) {
+                boolean deleted = imageFile.delete();
+                if (deleted) {
+                    return "Image deleted successfully.";
+                } else {
+                    return "Failed to delete image.";
+                }
+            } else {
+                return "Image not found.";
+            }
+        } catch (Exception e) {
+            return "Error occurred while deleting image: " + e.getMessage();
+        }
     }
 }

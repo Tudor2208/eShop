@@ -16,7 +16,6 @@ import static org.sdi.ordermanager.Constants.V1;
 @RequestMapping(V1 + CARTS)
 @RequiredArgsConstructor
 @Validated
-@CrossOrigin(origins = "http://localhost:3000")
 public class CartController {
 
     private final CartService cartService;

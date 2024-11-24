@@ -6,6 +6,7 @@ function Header(props) {
     const [searchText, setSearchText] = useState('');
     const [cartItemCount, setCartItemCount] = useState(0); 
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const calculateCartItemCount = () => {
         const cart = JSON.parse(localStorage.getItem('cart')) || []; 
@@ -14,18 +15,17 @@ function Header(props) {
     };
 
     useEffect(() => {
-        calculateCartItemCount(); // Initialize cart count on component mount
+        calculateCartItemCount(); 
     }, []); 
 
     useEffect(() => {
-        window.addEventListener('storage', calculateCartItemCount); // Listen to storage changes from other tabs
+        window.addEventListener('storage', calculateCartItemCount); 
         return () => window.removeEventListener('storage', calculateCartItemCount); 
     }, []);
 
-    // This function will be used when you update the cart in localStorage
     const updateCartInLocalStorage = (updatedCart) => {
         localStorage.setItem('cart', JSON.stringify(updatedCart)); 
-        calculateCartItemCount();  // Manually update the cart item count
+        calculateCartItemCount();  
     };
 
     const handleLogout = () => {
@@ -40,6 +40,10 @@ function Header(props) {
 
     const handleOrders = () => {
         navigate("/orders");
+    };
+
+    const handleAccount = () => {
+        navigate("/account");
     };
 
     const handleSearch = () => {
@@ -78,28 +82,30 @@ function Header(props) {
                 </button>
             </div>
             
-            <div className="nav-buttons">
-                <button className="nav-button">
-                    <i className="fas fa-user left-icon"></i> 
-                    My account
-                    <i className="fas fa-arrow-down right-icon"></i> 
-                </button>
-                <button className="nav-button" onClick={handleOrders}>
-                    <i className="fas fa-box left-icon"></i> 
-                    My orders
-                    <i className="fas fa-arrow-down right-icon"></i>
-                </button>
-                <button className="nav-button" onClick={handleCart}>
-                    <i className="fas fa-shopping-cart left-icon"></i> 
-                    My cart
-                    <i className="fas fa-arrow-down right-icon"></i> 
-                    {cartItemCount > 0 && (
-                        <div className="cart-badge">
-                            {cartItemCount}
-                        </div>
-                    )}
-                </button>
-            </div>
+            {!user.isAdmin && (
+                 <div className="nav-buttons">
+                 <button className="nav-button" onClick={handleAccount}>
+                     <i className="fas fa-user left-icon"></i> 
+                     My account
+                     <i className="fas fa-arrow-down right-icon"></i> 
+                 </button>
+                 <button className="nav-button" onClick={handleOrders}>
+                     <i className="fas fa-box left-icon"></i> 
+                     My orders
+                     <i className="fas fa-arrow-down right-icon"></i>
+                 </button>
+                 <button className="nav-button" onClick={handleCart}>
+                     <i className="fas fa-shopping-cart left-icon"></i> 
+                     My cart
+                     <i className="fas fa-arrow-down right-icon"></i> 
+                     {cartItemCount > 0 && (
+                         <div className="cart-badge">
+                             {cartItemCount}
+                         </div>
+                     )}
+                 </button>
+             </div>
+            )}
 
             <div className="logout">
                 <button className="logout-icon" title="Logout" onClick={handleLogout}>

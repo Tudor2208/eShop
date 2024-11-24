@@ -12,6 +12,7 @@ function Products({ categoryId, searchText }) {
     const [totalPages, setTotalPages] = useState(1);
 
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const fetchProducts = async (page = 0, sortBy, sortOrder) => {
         try {
@@ -61,8 +62,16 @@ function Products({ categoryId, searchText }) {
     };
 
     const handleCardClick = (id) => {
-        navigate(`/product/${id}`)
-    }
+        navigate(`/product/${id}`);
+    };
+
+    const redirectToCreateProductPage = () => {
+        navigate("/create-product");
+    };
+
+    const redirectToCategoryManagementPage = () => {
+        navigate("/categories");
+    };
 
     return (
         <>
@@ -89,6 +98,24 @@ function Products({ categoryId, searchText }) {
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
+
+                {user?.isAdmin && (
+                    <button
+                        className="add-product-button"
+                        onClick={redirectToCreateProductPage}
+                    >
+                        Add Product
+                    </button>
+                )}
+
+                {user?.isAdmin && (
+                    <button
+                        className="update-categories-button"
+                        onClick={redirectToCategoryManagementPage}
+                    >
+                        Update Categories
+                    </button>
+                )}
             </div>
 
             <div className="product-grid">

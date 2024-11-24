@@ -1,31 +1,53 @@
 import { useState } from 'react';  
+import { useNavigate } from 'react-router-dom';
 import '../css/SignupForm.css';
 import { toast } from 'sonner';
-
 
 function SignupForm(props) {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault(); 
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
 
-    props.onSubmit({
+    // Prepare the request body
+    const userData = {
       email,
+      password,
       firstName,
       lastName,
-      phone,
-      password,
-    });
+      phoneNumber
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        toast.success("Registration successful!");
+        navigate("/login"); 
+      } else {
+        const data = await response.json();
+        // Handle the error from the response
+        toast.error(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while registering. Please try again.");
+    }
   };
 
   return (
@@ -74,8 +96,8 @@ function SignupForm(props) {
             <input
               required
               type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               placeholder="Phone Number"
             />
           </div>
@@ -90,7 +112,6 @@ function SignupForm(props) {
               placeholder="Password"
               id="password-signup"
             />
-        
           </div>
 
           <div className="row-signup">

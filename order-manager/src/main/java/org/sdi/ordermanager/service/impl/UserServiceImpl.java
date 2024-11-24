@@ -2,11 +2,16 @@ package org.sdi.ordermanager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.sdi.ordermanager.entity.Cart;
+import org.sdi.ordermanager.entity.Order;
 import org.sdi.ordermanager.entity.User;
 import org.sdi.ordermanager.repository.UserRepository;
 import org.sdi.ordermanager.service.UserService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +28,7 @@ public class UserServiceImpl implements UserService {
         Cart cart = new Cart();
         cart.setUser(newUser);
         newUser.setCart(cart);
+        newUser.setOrders(new ArrayList<>());
         userRepository.save(newUser);
     }
 

@@ -22,7 +22,6 @@ import static org.sdi.productmanager.Constants.SLASH;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(V1 + REVIEWS)
-@CrossOrigin(origins = "http://localhost:3000")
 public class ReviewController {
 
     private final ReviewService reviewService;

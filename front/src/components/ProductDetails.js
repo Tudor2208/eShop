@@ -134,14 +134,14 @@ function ProductDetails() {
                                     ))}
                                 </div>
                                 <p>{review.message}</p>
-                                {review.reviewer.email === userEmail && (
-                                    <button
-                                        className="delete-review-button"
-                                        onClick={() => handleDeleteReview(review.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                )}
+                                {(review.reviewer.email === userEmail || JSON.parse(localStorage.getItem("user"))?.isAdmin) && (
+                                <button
+                                    className="delete-review-button"
+                                    onClick={() => handleDeleteReview(review.id)}
+                                >
+                                    Delete
+                                </button>
+                            )}
                             </div>
                         ))}
                     </div>
@@ -150,10 +150,12 @@ function ProductDetails() {
                 )}
             </div>
 
+            {userEmail && !JSON.parse(localStorage.getItem("user"))?.isAdmin && (
             <button className="add-review-button" onClick={() => setShowReviewForm(!showReviewForm)}>
                 {showReviewForm ? "Cancel" : "Add Review"}
             </button>
-
+            )}
+          
             {showReviewForm && (
                 <div className="review-form">
                     <h3>Add Your Review</h3>
@@ -173,7 +175,7 @@ function ProductDetails() {
                                     <option key={star} value={star}>{star} Star{star > 1 && "s"}</option>
                                 ))}
                             </select>
-                        </div>
+                        </div>    
                     <button className="submit-review-button" onClick={handleAddReview}>
                         Submit Review
                     </button>
