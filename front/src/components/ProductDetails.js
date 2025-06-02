@@ -88,7 +88,7 @@ function ProductDetails() {
             <h1>{product.title}</h1>
             <div className="product-details-content">
                 <img
-                    src={`${process.env.PUBLIC_URL}/images/${product.id}.png`}
+                    src={`https://gccc-eshop-images.s3.eu-north-1.amazonaws.com/${product.id}.png`}
                     alt={product.title}
                     className="product-details-image"
                 />

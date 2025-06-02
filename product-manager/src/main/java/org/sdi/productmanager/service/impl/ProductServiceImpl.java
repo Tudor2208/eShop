@@ -15,9 +15,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -33,9 +38,12 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryService categoryService;
     private final ProductMapper productMapper;
     private final KafkaProducerService kafkaProducerService;
+    private final S3Client s3Client;
 
     private static final String CREATE_PRODUCT_TOPIC = "product.create";
     private static final String DELETE_PRODUCT_TOPIC = "product.delete";
+    private static final String BUCKET_NAME = "gccc-eshop-images";
+    private static final String REGION = "eu-north-1";
 
     @Override
     public ProductResponse createProduct(CreateProductRequest request) {
@@ -119,18 +127,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ImageResponse uploadImage(MultipartFile file, String productId) {
         try {
-            Path uploadDir = Paths.get(IMAGE_UPLOAD_DIR);
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
+            String key = productId + ".png";
 
-            String fileName = productId + ".png";
-            Path filePath = uploadDir.resolve(fileName);
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .key(key)
+                    .contentType(file.getContentType())
+                    .build();
 
-            file.transferTo(filePath);
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
 
-            return new ImageResponse("/images/" + fileName);
-        } catch (IOException e) {
+            String fileUrl = "https://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key;
+
+            return new ImageResponse(fileUrl);
+        } catch (IOException | S3Exception e) {
             return new ImageResponse("Image upload failed: " + e.getMessage());
         }
     }

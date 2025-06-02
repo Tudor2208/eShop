@@ -25,7 +25,7 @@ function ShoppingCartPage() {
             productId: item.productId,
             title: productData.title,
             price: productData.price,
-            image: `${process.env.PUBLIC_URL}/images/${productData.id}.png`,
+            image: `https://gccc-eshop-images.s3.eu-north-1.amazonaws.com/${productData.id}.png`,
           };
         } else {
           return null;
