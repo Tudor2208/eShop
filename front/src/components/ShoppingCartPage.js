@@ -18,7 +18,7 @@ function ShoppingCartPage() {
   const fetchProductDetails = async (cart) => {
     const productPromises = cart.map(async (item) => {
       try {
-        const response = await fetch(`http://localhost:8081/api/v1/products/${item.productId}`);
+        const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/${item.productId}`);
         if (response.ok) {
           const productData = await response.json();
           return {
@@ -54,7 +54,7 @@ function ShoppingCartPage() {
     };
 
     try {
-        const response = await fetch(`http://localhost:8082/api/v1/carts/${user.email}`, {
+        const response = await fetch(`http://gccc2.eu-north-1.elasticbeanstalk.com:8082/api/v1/carts/${user.email}`, {
             method: "PUT",  
             headers: {
                 "Content-Type": "application/json",
@@ -102,7 +102,7 @@ function ShoppingCartPage() {
 
     try {
 
-      const response = await fetch('http://localhost:8082/api/v1/orders', {
+      const response = await fetch('http://gccc2.eu-north-1.elasticbeanstalk.com:8082/api/v1/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

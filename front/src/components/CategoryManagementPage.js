@@ -10,7 +10,7 @@ function CategoryManagementPage() {
     // Fetch all categories when the component mounts
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/v1/categories');
+        const response = await fetch('http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories');
         if (response.ok) {
           const data = await response.json();
           setCategories(data.content);  // Store the fetched categories
@@ -34,7 +34,7 @@ function CategoryManagementPage() {
     const category = { name: newCategory };
 
     try {
-      const response = await fetch('http://localhost:8081/api/v1/categories', {
+      const response = await fetch('http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function CategoryManagementPage() {
 
   const handleDeleteCategory = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/categories/${id}`, {
+      const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories/${id}`, {
         method: 'DELETE',
       });
 

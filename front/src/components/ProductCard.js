@@ -38,7 +38,7 @@ function ProductCard({ product, onClick, onDelete }) {
     };
 
     try {
-      const response = await fetch(`http://localhost:8082/api/v1/carts/${userEmail}`, {
+      const response = await fetch(`http://gccc2.eu-north-1.elasticbeanstalk.com:8082/api/v1/carts/${userEmail}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ function ProductCard({ product, onClick, onDelete }) {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/products/${product.id}`, {
+      const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/${product.id}`, {
         method: 'DELETE',
       });
   

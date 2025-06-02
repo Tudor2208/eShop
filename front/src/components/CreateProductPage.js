@@ -16,7 +16,7 @@ function CreateProductPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/v1/categories");
+        const response = await fetch("http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories");
         if (response.ok) {
           const categoriesData = await response.json();
           setCategories(categoriesData.content);
@@ -83,7 +83,7 @@ function CreateProductPage() {
     };
 
     try {
-      const response = await fetch("http://localhost:8081/api/v1/products", {
+      const response = await fetch("http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ function CreateProductPage() {
           formData.append("image", imageFile);
           formData.append("productId", createdProduct.id);
 
-          const uploadResponse = await fetch("http://localhost:8081/api/v1/products/upload-image", {
+          const uploadResponse = await fetch("http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/upload-image", {
             method: "POST",
             body: formData,
           });

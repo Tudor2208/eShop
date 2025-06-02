@@ -16,7 +16,7 @@ function Products({ categoryId, searchText }) {
 
     const fetchProducts = async (page = 0, sortBy, sortOrder) => {
         try {
-            let url = `http://localhost:8081/api/v1/products?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+            let url = `http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
             if (categoryId !== null) {
                 url += `&categoryId=${categoryId}`;
             }

@@ -16,11 +16,11 @@ function ProductDetails() {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const productResponse = await fetch(`http://localhost:8081/api/v1/products/${id}`);
+                const productResponse = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/${id}`);
                 const productData = await productResponse.json();
                 setProduct(productData);
 
-                const reviewsResponse = await fetch(`http://localhost:8081/api/v1/reviews?productId=${id}`);
+                const reviewsResponse = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/reviews?productId=${id}`);
                 const reviewsData = await reviewsResponse.json();
                 setReviews(reviewsData.content);
 
@@ -36,7 +36,7 @@ function ProductDetails() {
 
     const handleAddReview = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/api/v1/reviews`, {
+            const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/reviews`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function ProductDetails() {
     const handleDeleteReview = async (reviewId) => {
         if (window.confirm("Are you sure you want to delete this review?")) {
             try {
-                const response = await fetch(`http://localhost:8081/api/v1/reviews/${reviewId}`, {
+                const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/reviews/${reviewId}`, {
                     method: "DELETE",
                 });
                 if (response.ok) {

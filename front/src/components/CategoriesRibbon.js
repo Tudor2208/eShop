@@ -11,7 +11,7 @@ function CategoriesRibbon(props) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/api/v1/categories?page=${page}`);
+        const response = await axios.get(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories?page=${page}`);
         setCategories(response.data.content); 
         setTotalPages(response.data.totalPages); 
       } catch (error) {

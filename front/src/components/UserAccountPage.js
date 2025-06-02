@@ -30,7 +30,7 @@ function UserAccountPage() {
 
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/v1/users/${userEmail}`);
+        const response = await fetch(`http://gccc.eu-north-1.elasticbeanstalk.com:8080/api/v1/users/${userEmail}`);
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);
@@ -65,7 +65,7 @@ function UserAccountPage() {
     };
 
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/users/${userEmail}`, {
+      const response = await fetch(`http://gccc.eu-north-1.elasticbeanstalk.com:8080/api/v1/users/${userEmail}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

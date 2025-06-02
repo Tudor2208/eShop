@@ -16,7 +16,7 @@ function ProductEditPage() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(`http://localhost:8081/api/v1/products/${id}`);
+      const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/${id}`);
       if (response.ok) {
         const productData = await response.json();
         setProduct(productData);
@@ -31,7 +31,7 @@ function ProductEditPage() {
     };
 
     const fetchCategories = async () => {
-      const response = await fetch('http://localhost:8081/api/v1/categories');
+      const response = await fetch('http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/categories');
       if (response.ok) {
         const categoriesData = await response.json();
         setCategories(categoriesData.content);
@@ -56,7 +56,7 @@ function ProductEditPage() {
     };
 
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/products/${id}`, {
+      const response = await fetch(`http://gccc1.eu-north-1.elasticbeanstalk.com:8081/api/v1/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

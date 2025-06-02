@@ -29,7 +29,7 @@ function SignupForm(props) {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/api/v1/users', {
+      const response = await fetch('http://gccc.eu-north-1.elasticbeanstalk.com:8080/api/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

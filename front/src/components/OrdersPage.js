@@ -14,7 +14,7 @@ function OrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`http://localhost:8082/api/v1/orders?userId=${user.email}`);
+      const response = await fetch(`http://gccc2.eu-north-1.elasticbeanstalk.com:8082/api/v1/orders?userId=${user.email}`);
       if (response.ok) {
         const data = await response.json();
         setOrders(data);
