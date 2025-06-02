@@ -2,28 +2,28 @@ spring:
   application:
     name: order-manager
   datasource:
-    url: jdbc:sqlserver://${DB_HOST}:${DB_PORT};databaseName=master;user=${DB_USERNAME};password=${DB_PASSWORD};encrypt=true;trustServerCertificate=true
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:postgresql://${RDS_HOSTNAME:localhost}:${RDS_PORT:1234}/${RDS_DB_NAME:orders-db}
+    username: ${RDS_USERNAME:postgres}
+    password: ${RDS_PASSWORD:yourpassword}
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
-        hbm2ddl.auto: update
   kafka:
-    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+    bootstrap-servers: >
+      b-1.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092,
+      b-2.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092,
+      b-3.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: my-consumer-group-2
-      auto-offset-reset: earliest
+      group-id: order-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 client:
   product-manager:
-    base-url: http://${PRODUCT_MANAGER_HOST}:8081/
+    base-url: http://gccc1.eu-north-1.elasticbeanstalk.com:8081/
 
 server:
   port: 8082

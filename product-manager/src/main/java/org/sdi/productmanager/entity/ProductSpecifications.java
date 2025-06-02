@@ -1,7 +1,6 @@
 package org.sdi.productmanager.entity;
-import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Locale;
+import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecifications {
 

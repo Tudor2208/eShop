@@ -7,30 +7,28 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   datasource:
-    url: jdbc:oracle:thin:@${DB_HOST}:${DB_PORT}/XE
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:postgresql://${RDS_HOSTNAME:localhost}:${RDS_PORT:1234}/${RDS_DB_NAME:products-db}
+    username: ${RDS_USERNAME:postgres}
+    password: ${RDS_PASSWORD:yourpassword}
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.OracleDialect
     hibernate:
       ddl-auto: update
   kafka:
-    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
-    consumer:
-      group-id: my-consumer-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    bootstrap-servers: >
+      b-1.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092,
+      b-2.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092,
+      b-3.eshop.jvk64j.c2.kafka.eu-north-1.amazonaws.com:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: product-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 client:
   user-manager:
-    base-url: http://${USER_MANAGER_HOST}:8080/
+    base-url: http://gccc.eu-north-1.elasticbeanstalk.com:8080/
 
 server:
   port: 8081

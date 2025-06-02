@@ -11,4 +11,5 @@ public interface OrderService {
     OrderResponse createOrder(CreateOrderRequest createOrderRequest);
     OrderResponse getOrder(Long orderId);
     List<OrderResponse> getOrdersByUser(String userId);
+    void deleteOrder(Long orderId);
 }

@@ -24,7 +24,7 @@ public class Product {
     private String title;
     @Column(nullable = false)
     private Double price;
-    @Column(columnDefinition = "CLOB", nullable = false)
+    @Column(nullable = false)
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, Object> specifications;
     @ManyToOne(fetch = FetchType.EAGER)

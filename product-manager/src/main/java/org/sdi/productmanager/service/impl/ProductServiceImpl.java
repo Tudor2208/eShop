@@ -130,7 +130,6 @@ public class ProductServiceImpl implements ProductService {
             file.transferTo(filePath);
 
             return new ImageResponse("/images/" + fileName);
-
         } catch (IOException e) {
             return new ImageResponse("Image upload failed: " + e.getMessage());
         }

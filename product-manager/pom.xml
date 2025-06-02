@@ -19,7 +19,7 @@
     <description>product-manager application for managing products</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version> <!-- Updated for JDK 17 -->
     </properties>
 
     <dependencies>
@@ -53,15 +53,15 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <version>21.9.0.0</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 

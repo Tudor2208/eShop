@@ -88,4 +88,11 @@ public class OrderServiceImpl implements OrderService {
                 .map(orderMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(String.format("Order with id %s not found", orderId)));
+        orderRepository.delete(order);
+    }
 }
