@@ -17,18 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.sdi.productmanager.Constants.IMAGE_UPLOAD_DIR;
 
 @Service
 @RequiredArgsConstructor
@@ -145,21 +140,21 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
     public String deleteImage(String productId) {
         try {
-            Path imagePath = Paths.get(IMAGE_UPLOAD_DIR, productId + ".png");
-            File imageFile = imagePath.toFile();
+            String key = productId + ".png";
 
-            if (imageFile.exists() && imageFile.isFile()) {
-                boolean deleted = imageFile.delete();
-                if (deleted) {
-                    return "Image deleted successfully.";
-                } else {
-                    return "Failed to delete image.";
-                }
-            } else {
-                return "Image not found.";
-            }
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .key(key)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+
+            return "Image deleted successfully from S3.";
+        } catch (S3Exception e) {
+            return "Failed to delete image from S3: " + e.awsErrorDetails().errorMessage();
         } catch (Exception e) {
             return "Error occurred while deleting image: " + e.getMessage();
         }
